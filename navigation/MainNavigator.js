@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ChatListScreen from "../screens/ChatListScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import ChatSettingScreen from "../screens/ChatSettingScreen";
+import ChatScreen from "../screens/ChatScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -57,6 +58,14 @@ export default function () {
                 component={TabNavigator}
                 options={{
                     headerShown: false,
+                }}
+            />
+            <Stack.Screen
+                name="ChatScreen"
+                component={ChatScreen}
+                options={{
+                    headerTitle: "",
+                    headerBackTitle: "Back",
                 }}
             />
             <Stack.Screen
