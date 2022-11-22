@@ -34,6 +34,7 @@ const SignUpForm = () => {
                 size={20}
                 onChangedInput={onChangedInput}
                 autoCapitalize="none"
+                errorText={formState.inputValidities["firstName"]}
             />
             <Input
                 id="lastName"
@@ -43,6 +44,7 @@ const SignUpForm = () => {
                 size={20}
                 onChangedInput={onChangedInput}
                 autoCapitalize="none"
+                errorText={formState.inputValidities["lastName"]}
             />
             <Input
                 id="email"
@@ -53,6 +55,7 @@ const SignUpForm = () => {
                 onChangedInput={onChangedInput}
                 autoCapitalize="none"
                 keyboardType="email-address"
+                errorText={formState.inputValidities["email"]}
             />
             <Input
                 id="password"
@@ -63,6 +66,7 @@ const SignUpForm = () => {
                 onChangedInput={onChangedInput}
                 autoCapitalize="none"
                 secureTextEntry
+                errorText={formState.inputValidities["password"]}
             />
             <SubmitButton
                 title="Sign up"
