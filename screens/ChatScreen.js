@@ -7,7 +7,7 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
 
@@ -15,6 +15,8 @@ import backgroundimage from "../assets/images/backgroundimage.jpeg";
 import colors from "../constants/colors";
 
 const ChatScreen = () => {
+    const [messageText, setMessageText] = useState("");
+
     return (
         <SafeAreaView
             edges={["right", "bottom", "left"]}
@@ -32,13 +34,25 @@ const ChatScreen = () => {
                 >
                     <Feather name="plus" size={24} color={colors.blue} />
                 </TouchableOpacity>
-                <TextInput style={styles.textarea} />
-                <TouchableOpacity
-                    style={styles.mediaButton}
-                    onPress={() => console.log("Pressed!")}
-                >
-                    <Feather name="camera" size={24} color={colors.blue} />
-                </TouchableOpacity>
+                <TextInput
+                    style={styles.textarea}
+                    onChangeText={(text) => setMessageText(text)}
+                />
+                {messageText === "" ? (
+                    <TouchableOpacity
+                        style={styles.mediaButton}
+                        onPress={() => console.log("Pressed!")}
+                    >
+                        <Feather name="camera" size={24} color={colors.blue} />
+                    </TouchableOpacity>
+                ) : (
+                    <TouchableOpacity
+                        style={{ ...styles.mediaButton, ...styles.sendButton }}
+                        onPress={() => console.log("Pressed!")}
+                    >
+                        <Feather name="send" size={20} color="white" />
+                    </TouchableOpacity>
+                )}
             </View>
         </SafeAreaView>
     );
@@ -72,5 +86,10 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         width: 35,
+    },
+    sendButton: {
+        backgroundColor: colors.blue,
+        borderRadius: 40,
+        padding: 8,
     },
 });
