@@ -1,6 +1,8 @@
 import {
     Button,
     ImageBackground,
+    KeyboardAvoidingView,
+    Platform,
     StyleSheet,
     Text,
     TextInput,
@@ -25,40 +27,53 @@ const ChatScreen = () => {
             edges={["right", "bottom", "left"]}
             style={styles.container}
         >
-            <ImageBackground
-                source={backgroundimage}
-                style={styles.bgimage}
-            ></ImageBackground>
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior={Platform.OS === "ios" ? "padding" : undefined}
+                keyboardVerticalOffset={100}
+            >
+                <ImageBackground
+                    source={backgroundimage}
+                    style={styles.bgimage}
+                ></ImageBackground>
 
-            <View style={styles.inputContainer}>
-                <TouchableOpacity
-                    style={styles.mediaButton}
-                    onPress={() => console.log("Pressed!")}
-                >
-                    <Feather name="plus" size={24} color={colors.blue} />
-                </TouchableOpacity>
-                <TextInput
-                    value={messageText}
-                    style={styles.textarea}
-                    onChangeText={(text) => setMessageText(text)}
-                    onSubmitEditing={sendMessage}
-                />
-                {messageText === "" ? (
+                <View style={styles.inputContainer}>
                     <TouchableOpacity
                         style={styles.mediaButton}
                         onPress={() => console.log("Pressed!")}
                     >
-                        <Feather name="camera" size={24} color={colors.blue} />
+                        <Feather name="plus" size={24} color={colors.blue} />
                     </TouchableOpacity>
-                ) : (
-                    <TouchableOpacity
-                        style={{ ...styles.mediaButton, ...styles.sendButton }}
-                        onPress={sendMessage}
-                    >
-                        <Feather name="send" size={20} color="white" />
-                    </TouchableOpacity>
-                )}
-            </View>
+                    <TextInput
+                        value={messageText}
+                        style={styles.textarea}
+                        onChangeText={(text) => setMessageText(text)}
+                        onSubmitEditing={sendMessage}
+                    />
+                    {messageText === "" ? (
+                        <TouchableOpacity
+                            style={styles.mediaButton}
+                            onPress={() => console.log("Pressed!")}
+                        >
+                            <Feather
+                                name="camera"
+                                size={24}
+                                color={colors.blue}
+                            />
+                        </TouchableOpacity>
+                    ) : (
+                        <TouchableOpacity
+                            style={{
+                                ...styles.mediaButton,
+                                ...styles.sendButton,
+                            }}
+                            onPress={sendMessage}
+                        >
+                            <Feather name="send" size={20} color="white" />
+                        </TouchableOpacity>
+                    )}
+                </View>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 };
