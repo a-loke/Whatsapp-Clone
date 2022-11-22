@@ -1,31 +1,27 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PageContainer from "../components/PageContainer";
-import Input from "../components/Input";
-import { Feather } from "@expo/vector-icons";
-import SubmitButton from "../components/SubmitButton";
+import SignUpForm from "../components/SignUpForm";
+import SignInForm from "../components/SignInForm";
+import colors from "../constants/colors";
 
 const AuthenticationScreen = () => {
+    const [isSignedUp, setisSignedUp] = useState(false);
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <PageContainer>
-                <Input
-                    label="First name"
-                    icon="user"
-                    pack={Feather}
-                    size={20}
-                />
-                <Input label="Last name" icon="user" pack={Feather} size={20} />
-                <Input label="Email" icon="mail" pack={Feather} size={20} />
-                <Input label="Password" icon="lock" pack={Feather} size={20} />
-                <SubmitButton
-                    title="Sign up"
+                {isSignedUp ? <SignUpForm /> : <SignInForm />}
+                <TouchableOpacity
+                    style={styles.linkContainer}
                     onPress={() => {
-                        console.log("Button Pressed");
+                        setisSignedUp((prevState) => !prevState);
                     }}
-                    style={{ marginTop: 20 }}
-                />
+                >
+                    <Text style={styles.link}>{`Switch to ${
+                        isSignedUp ? "Sign In" : "Sign Up"
+                    }`}</Text>
+                </TouchableOpacity>
             </PageContainer>
         </SafeAreaView>
     );
@@ -33,4 +29,15 @@ const AuthenticationScreen = () => {
 
 export default AuthenticationScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    linkContainer: {
+        marginVertical: 15,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    link: {
+        color: colors.blue,
+        fontFamily: "medium",
+        letterSpacing: 0.3,
+    },
+});
