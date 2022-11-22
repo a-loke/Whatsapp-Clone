@@ -1,11 +1,9 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import React from "react";
-import { Feather } from "@expo/vector-icons";
 
 import colors from "../constants/colors";
 
 const Input = (props) => {
-    // console.log(icon.package);
     return (
         <View style={styles.container}>
             <Text style={styles.label}>{props.label}</Text>
@@ -19,6 +17,11 @@ const Input = (props) => {
                 )}
                 <TextInput style={styles.input} />
             </View>
+            {props.errorText && (
+                <View style={styles.errorContainer}>
+                    <Text style={styles.errorText}>{props.errorText}</Text>
+                </View>
+            )}
         </View>
     );
 };
@@ -54,5 +57,14 @@ const styles = StyleSheet.create({
         fontFamily: "regular",
         letterSpacing: 0.3,
         paddingTop: 0,
+    },
+    errorContainer: {
+        paddingVertical: 5,
+    },
+    errorText: {
+        color: "red",
+        fontSize: 13,
+        fontFamily: "regular",
+        letterSpacing: 0.3,
     },
 });

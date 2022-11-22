@@ -10,11 +10,14 @@ const AuthenticationScreen = () => {
         <SafeAreaView style={{ flex: 1 }}>
             <PageContainer>
                 <Input
-                    label="first name"
+                    label="First name"
                     icon="user"
                     pack={Feather}
                     size={20}
                 />
+                <Input label="Last name" icon="user" pack={Feather} size={20} />
+                <Input label="Email" icon="mail" pack={Feather} size={20} />
+                <Input label="Password" icon="lock" pack={Feather} size={20} />
             </PageContainer>
         </SafeAreaView>
     );
