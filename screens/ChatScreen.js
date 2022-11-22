@@ -7,7 +7,7 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
 
@@ -17,6 +17,9 @@ import colors from "../constants/colors";
 const ChatScreen = () => {
     const [messageText, setMessageText] = useState("");
 
+    const sendMessage = useCallback(() => {
+        setMessageText("");
+    }, [messageText]);
     return (
         <SafeAreaView
             edges={["right", "bottom", "left"]}
@@ -35,8 +38,10 @@ const ChatScreen = () => {
                     <Feather name="plus" size={24} color={colors.blue} />
                 </TouchableOpacity>
                 <TextInput
+                    value={messageText}
                     style={styles.textarea}
                     onChangeText={(text) => setMessageText(text)}
+                    onSubmitEditing={sendMessage}
                 />
                 {messageText === "" ? (
                     <TouchableOpacity
@@ -48,7 +53,7 @@ const ChatScreen = () => {
                 ) : (
                     <TouchableOpacity
                         style={{ ...styles.mediaButton, ...styles.sendButton }}
-                        onPress={() => console.log("Pressed!")}
+                        onPress={sendMessage}
                     >
                         <Feather name="send" size={20} color="white" />
                     </TouchableOpacity>
