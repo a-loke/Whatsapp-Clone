@@ -8,7 +8,7 @@ const Input = (props) => {
     // console.log(icon.package);
     return (
         <View style={styles.container}>
-            <Text>{props.label}</Text>
+            <Text style={styles.label}>{props.label}</Text>
             <View style={styles.inputContainer}>
                 {props.icon && (
                     <props.pack
@@ -17,7 +17,7 @@ const Input = (props) => {
                         size={props.size || 15}
                     />
                 )}
-                <TextInput />
+                <TextInput style={styles.input} />
             </View>
         </View>
     );
@@ -28,6 +28,12 @@ export default Input;
 const styles = StyleSheet.create({
     container: {
         width: "100%",
+    },
+    label: {
+        paddingVertical: 8,
+        fontFamily: "bold",
+        letterSpacing: 0.3,
+        color: colors.textColor,
     },
     inputContainer: {
         width: "100%",
@@ -41,5 +47,12 @@ const styles = StyleSheet.create({
     icon: {
         marginRight: 10,
         color: colors.grey,
+    },
+    input: {
+        color: colors.textColor,
+        flex: 1,
+        fontFamily: "regular",
+        letterSpacing: 0.3,
+        paddingTop: 0,
     },
 });
