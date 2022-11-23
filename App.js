@@ -7,7 +7,7 @@ import * as Font from "expo-font";
 
 import AppNavigator from "./navigation/AppNavigator";
 
-LogBox.ignoreLogs["AsyncStorage has been extracted from react-native"];
+LogBox.ignoreLogs(["AsyncStorage has been extracted"]);
 
 SplashScreen.preventAutoHideAsync();
 

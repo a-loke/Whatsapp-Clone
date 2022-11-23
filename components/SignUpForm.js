@@ -1,4 +1,4 @@
-import React, { useCallback, useReducer } from "react";
+import React, { useCallback, useEffect, useReducer, useState } from "react";
 import { Feather } from "@expo/vector-icons";
 
 import Input from "../components/Input";
@@ -6,7 +6,7 @@ import SubmitButton from "../components/SubmitButton";
 import { validateInput } from "../utils/actions/formAction";
 import { reducer } from "../utils/reducers/formReducer";
 import { signUp } from "../utils/actions/authAction";
-import { getFirebaseApp } from "../utils/firebaseHelper";
+import { Alert } from "react-native";
 
 const initialState = {
     inputValues: {
@@ -25,8 +25,14 @@ const initialState = {
 };
 
 const SignUpForm = () => {
+    const [error, setError] = useState();
     const [formState, dispatchFormState] = useReducer(reducer, initialState);
 
+    useEffect(() => {
+        if (error) {
+            Alert.alert("An error occurred", error);
+        }
+    }, [error]);
     const onChangedInput = useCallback(
         (inputId, inputValue) => {
             const validationResult = validateInput(inputId, inputValue);
@@ -39,14 +45,18 @@ const SignUpForm = () => {
         [dispatchFormState]
     );
 
-    const handleAuth = () => {
-        console.log(formState.inputValues.firstName);
-        signUp(
-            formState.inputValues.firstName,
-            formState.inputValues.lastName,
-            formState.inputValues.email,
-            formState.inputValues.password
-        );
+    const handleAuth = async () => {
+        try {
+            await signUp(
+                formState.inputValues.firstName,
+                formState.inputValues.lastName,
+                formState.inputValues.email,
+                formState.inputValues.password
+            );
+            setError(null);
+        } catch (error) {
+            setError(error.message);
+        }
     };
     return (
         <>
