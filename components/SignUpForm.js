@@ -6,28 +6,9 @@ import SubmitButton from "../components/SubmitButton";
 import { validateInput } from "../utils/actions/formAction";
 import { reducer } from "../utils/reducers/formReducer";
 import { signUp } from "../utils/actions/authAction";
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
+import { getFirebaseApp } from "../utils/firebaseHelper";
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-    apiKey: "AIzaSyDGcHwNQFZH_7mWZvOh48PAv9GG6dxvXO0",
-    authDomain: "whatsapp-a2775.firebaseapp.com",
-    projectId: "whatsapp-a2775",
-    storageBucket: "whatsapp-a2775.appspot.com",
-    messagingSenderId: "95046659039",
-    appId: "1:95046659039:web:5e76a96cac961866a6b26a",
-    measurementId: "G-4FBB1PFEW7",
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-console.log(app);
+console.log(getFirebaseApp());
 const initialState = {
     inputValues: {
         firstName: "",
