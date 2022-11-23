@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useReducer, useState } from "react";
 import { Feather } from "@expo/vector-icons";
+import { useDispatch } from "react-redux";
+import { ActivityIndicator, Alert } from "react-native";
 
 import Input from "../components/Input";
 import SubmitButton from "../components/SubmitButton";
 import { validateInput } from "../utils/actions/formAction";
 import { reducer } from "../utils/reducers/formReducer";
 import { signUp } from "../utils/actions/authAction";
-import { ActivityIndicator, Alert } from "react-native";
 import colors from "../constants/colors";
-import { useDispatch } from "react-redux";
 
 const initialState = {
     inputValues: {
@@ -58,8 +58,8 @@ const SignUpForm = () => {
                 formState.inputValues.email,
                 formState.inputValues.password
             );
-            await dispatch(action);
             setError(null);
+            await dispatch(action);
         } catch (error) {
             setError(error.message);
             setIsLoading(false);
