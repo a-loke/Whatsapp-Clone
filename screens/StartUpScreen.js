@@ -4,7 +4,8 @@ import commonStyles from "../constants/commonStyles";
 import colors from "../constants/colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
-import { setDidTryAutoLogin } from "../store/authSlice";
+import { authenticate, setDidTryAutoLogin } from "../store/authSlice";
+import { getUserData } from "../utils/actions/userAction";
 
 const StartUpScreen = () => {
     const dispatch = useDispatch();
@@ -13,9 +14,18 @@ const StartUpScreen = () => {
             const storedData = await AsyncStorage.getItem("userData");
 
             if (!storedData) {
+            }
+
+            const parsedData = JSON.parse(storedData);
+            const { token, userId, expiryDate: expiryDateString } = parsedData;
+            const expiryDate = new Date(expiryDateString);
+            if (expiryDate <= new Date() || !token || !userId) {
                 dispatch(setDidTryAutoLogin());
                 return;
             }
+
+            const userData = await getUserData(userId);
+            dispatch(authenticate({ token: token, userData }));
         };
         fetchUserData();
     }, []);

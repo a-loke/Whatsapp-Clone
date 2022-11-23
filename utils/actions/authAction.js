@@ -19,6 +19,7 @@ export const signUp = (firstName, lastName, email, password) => {
             const expiryDate = new Date(expirationTime);
             const userData = await createUser(firstName, lastName, email, uid);
             dispatch(authenticate({ token: accessToken, userData }));
+            saveUserDataToStorage(accessToken, uid, expiryDate);
         } catch (error) {
             console.log(error);
             const errorCode = error.code;
