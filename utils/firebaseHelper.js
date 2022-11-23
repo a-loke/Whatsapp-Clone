@@ -9,6 +9,8 @@ export const getFirebaseApp = () => {
         messagingSenderId: "95046659039",
         appId: "1:95046659039:web:5e76a96cac961866a6b26a",
         measurementId: "G-4FBB1PFEW7",
+        databaseURL:
+            "https://whatsapp-a2775-default-rtdb.asia-southeast1.firebasedatabase.app",
     };
 
     // Initialize Firebase
