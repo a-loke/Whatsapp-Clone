@@ -1,11 +1,13 @@
 import "react-native-gesture-handler";
-import { StyleSheet } from "react-native";
+import { LogBox, StyleSheet } from "react-native";
 import { useCallback, useEffect, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
 
 import AppNavigator from "./navigation/AppNavigator";
+
+LogBox.ignoreLogs["AsyncStorage has been extracted from react-native"];
 
 SplashScreen.preventAutoHideAsync();
 

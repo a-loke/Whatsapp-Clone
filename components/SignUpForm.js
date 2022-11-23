@@ -8,7 +8,6 @@ import { reducer } from "../utils/reducers/formReducer";
 import { signUp } from "../utils/actions/authAction";
 import { getFirebaseApp } from "../utils/firebaseHelper";
 
-console.log(getFirebaseApp());
 const initialState = {
     inputValues: {
         firstName: "",
