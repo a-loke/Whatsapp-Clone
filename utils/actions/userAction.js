@@ -7,8 +7,8 @@ export const getUserData = async (userId) => {
         const dbRef = ref(getDatabase(app));
         const user = child(dbRef, `users/${userId}`);
 
-        const userData = await get(user);
-        return userData.val();
+        const snapshot = await get(user);
+        return snapshot.val();
     } catch (error) {
         console.log(error);
     }

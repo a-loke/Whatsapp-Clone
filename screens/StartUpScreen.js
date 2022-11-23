@@ -14,6 +14,8 @@ const StartUpScreen = () => {
             const storedData = await AsyncStorage.getItem("userData");
 
             if (!storedData) {
+                dispatch(setDidTryAutoLogin());
+                return;
             }
 
             const parsedData = JSON.parse(storedData);
@@ -28,7 +30,7 @@ const StartUpScreen = () => {
             dispatch(authenticate({ token: token, userData }));
         };
         fetchUserData();
-    }, []);
+    }, [dispatch]);
     return (
         <View style={commonStyles.center}>
             <ActivityIndicator size={"large"} color={colors.primary} />

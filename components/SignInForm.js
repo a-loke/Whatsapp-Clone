@@ -1,10 +1,13 @@
-import React, { useCallback, useReducer } from "react";
+import React, { useCallback, useEffect, useReducer, useState } from "react";
 import Input from "../components/Input";
 import { Feather } from "@expo/vector-icons";
 import SubmitButton from "../components/SubmitButton";
 import { validateInput } from "../utils/actions/formAction";
 import { reducer } from "../utils/reducers/formReducer";
 import { signIn } from "../utils/actions/authAction";
+import { useDispatch } from "react-redux";
+import { ActivityIndicator, Alert } from "react-native";
+import colors from "../constants/colors";
 
 const initialState = {
     inputValues: {
@@ -19,7 +22,17 @@ const initialState = {
 };
 
 const SignInForm = () => {
+    const dispatch = useDispatch();
+    const [error, setError] = useState();
+    const [isLoading, setIsLoading] = useState(false);
     const [formState, dispatchFormState] = useReducer(reducer, initialState);
+
+    useEffect(() => {
+        if (error) {
+            Alert.alert("An error occurred", error);
+        }
+    }, [error]);
+
     const onChangedInput = useCallback(
         (inputId, inputValue) => {
             const validationResult = validateInput(inputId, inputValue);
@@ -28,9 +41,20 @@ const SignInForm = () => {
         [dispatchFormState]
     );
 
-    const handleAuth = () => {
-        signIn(formState.inputValues.email, formState.inputValues.password);
-    };
+    const handleAuth = useCallback(async () => {
+        try {
+            setIsLoading(true);
+            const action = signIn(
+                formState.inputValues.email,
+                formState.inputValues.password
+            );
+            await dispatch(action);
+            setError(null);
+        } catch (error) {
+            setError(error.message);
+            setIsLoading(false);
+        }
+    }, [dispatch, formState]);
 
     return (
         <>
@@ -56,12 +80,20 @@ const SignInForm = () => {
                 onChangedInput={onChangedInput}
                 errorText={formState.inputValidities["password"]}
             />
-            <SubmitButton
-                title="Sign In"
-                onPress={handleAuth}
-                style={{ marginTop: 20 }}
-                disabled={!formState.formIsValid}
-            />
+            {isLoading ? (
+                <ActivityIndicator
+                    size={"small"}
+                    color={colors.primary}
+                    style={{ marginTop: 25 }}
+                />
+            ) : (
+                <SubmitButton
+                    title="Sign In"
+                    onPress={handleAuth}
+                    style={{ marginTop: 20 }}
+                    disabled={!formState.formIsValid}
+                />
+            )}
         </>
     );
 };

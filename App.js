@@ -5,12 +5,12 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
 import { Provider } from "react-redux";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import AppNavigator from "./navigation/AppNavigator";
 import { store } from "./store/store";
 
 LogBox.ignoreLogs(["AsyncStorage has been extracted"]);
-
+// AsyncStorage.clear();
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {

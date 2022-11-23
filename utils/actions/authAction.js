@@ -1,9 +1,13 @@
 import { getFirebaseApp } from "../firebaseHelper";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import {
+    createUserWithEmailAndPassword,
+    getAuth,
+    signInWithEmailAndPassword,
+} from "firebase/auth";
 import { child, getDatabase, ref, set } from "firebase/database";
 import { authenticate } from "./../../store/authSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { getUserData } from "./userAction";
 export const signUp = (firstName, lastName, email, password) => {
     return async (dispatch) => {
         const app = getFirebaseApp();
@@ -32,6 +36,39 @@ export const signUp = (firstName, lastName, email, password) => {
         }
     };
 };
+
+export const signIn = (email, password) => {
+    return async (dispatch) => {
+        const app = getFirebaseApp();
+        const auth = getAuth();
+        try {
+            const result = await signInWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
+            const { uid, stsTokenManager } = result.user;
+            const { accessToken, expirationTime } = stsTokenManager;
+            const expiryDate = new Date(expirationTime);
+            const userData = await getUserData(uid);
+            dispatch(authenticate({ token: accessToken, userData }));
+            saveUserDataToStorage(accessToken, uid, expiryDate);
+        } catch (error) {
+            const errorCode = error.code;
+            console.log(errorCode);
+            let message = "Something went wrong!";
+            if (
+                errorCode === "auth/wrong-password" ||
+                errorCode === "auth/user-not-found"
+            ) {
+                message = "The email or password is incorrect";
+            }
+
+            throw new Error(message);
+        }
+    };
+};
+
 const createUser = async (firstName, lastName, email, userId) => {
     const firstLast = `${firstName} ${lastName}`.toLowerCase();
 
@@ -59,8 +96,4 @@ const saveUserDataToStorage = (token, userId, expiryDate) => {
             expiryDate,
         })
     );
-};
-
-export const signIn = (email, password) => {
-    console.log(email, password);
 };
