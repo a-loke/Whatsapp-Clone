@@ -19,12 +19,17 @@ const SettingsScreen = () => {
     const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(false);
     const userData = useSelector((state) => state.auth.userData);
+
+    const firstName = userData.firstName || "";
+    const lastName = userData.lastName || "";
+    const email = userData.email || "";
+    const about = userData.about || "";
     const initialState = {
         inputValues: {
-            firstName: userData.firstName || "",
-            lastName: userData.lastName || "",
-            email: userData.email || "",
-            about: userData.about || "",
+            firstName,
+            lastName,
+            email,
+            about,
         },
         inputValidities: {
             firstName: undefined,
@@ -47,7 +52,7 @@ const SettingsScreen = () => {
         [dispatchFormState]
     );
 
-    const handleSave = async () => {
+    const handleSave = useCallback(async () => {
         const updatedValues = formState.inputValues;
 
         try {
@@ -62,6 +67,16 @@ const SettingsScreen = () => {
         } finally {
             setIsLoading(false);
         }
+    }, [formState, dispatch]);
+
+    const hasChanges = () => {
+        const currentValues = formState.inputValues;
+        return (
+            currentValues.firstName != firstName ||
+            currentValues.lastName != lastName ||
+            currentValues.email != email ||
+            currentValues.about != about
+        );
     };
     return (
         <PageContainer>
@@ -118,12 +133,14 @@ const SettingsScreen = () => {
                     style={{ marginTop: 25 }}
                 />
             ) : (
-                <SubmitButton
-                    title="Save"
-                    onPress={handleSave}
-                    style={{ marginTop: 20 }}
-                    disabled={!formState.formIsValid}
-                />
+                hasChanges() && (
+                    <SubmitButton
+                        title="Save"
+                        onPress={handleSave}
+                        style={{ marginTop: 20 }}
+                        disabled={!formState.formIsValid}
+                    />
+                )
             )}
             <SubmitButton
                 title="Logout"
