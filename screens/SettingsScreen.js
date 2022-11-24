@@ -13,12 +13,12 @@ import {
     updateSignedInUserData,
     userLogout,
 } from "../utils/actions/authAction";
+import { updateLoggedInUserData } from "../store/authSlice";
 
 const SettingsScreen = () => {
     const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(false);
     const userData = useSelector((state) => state.auth.userData);
-
     const initialState = {
         inputValues: {
             firstName: userData.firstName || "",
@@ -35,7 +35,6 @@ const SettingsScreen = () => {
         formIsValid: false,
     };
     const [formState, dispatchFormState] = useReducer(reducer, initialState);
-
     const onChangedInput = useCallback(
         (inputId, inputValue) => {
             const validationResult = validateInput(inputId, inputValue);
@@ -49,13 +48,17 @@ const SettingsScreen = () => {
     );
 
     const handleSave = async () => {
-        const updatedUserData = formState.inputValues;
+        const updatedValues = formState.inputValues;
+
         try {
             setIsLoading(true);
-            await updateSignedInUserData(userData.userId, updatedUserData);
+            await updateSignedInUserData(userData.userId, updatedValues);
+            dispatch(updateLoggedInUserData({ newData: updatedValues }));
+
             Alert.alert("Success!", "Data has been updated.");
         } catch (error) {
-            Alert.alert("An error occurred!", "Unable to update data");
+            console.log(error);
+            Alert.alert("An error occurred!", error.code);
         } finally {
             setIsLoading(false);
         }

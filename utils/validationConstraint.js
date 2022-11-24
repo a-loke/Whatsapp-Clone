@@ -15,7 +15,7 @@ export const validateString = (id, value) => {
 };
 
 export const validateLength = (id, value, allowEmpty, minLength, maxLength) => {
-    constraints = { presence: { allowEmpty } };
+    const constraints = { presence: { allowEmpty } };
     if (!allowEmpty || value !== "") {
         constraints.length = {};
 
