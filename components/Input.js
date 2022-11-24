@@ -1,10 +1,12 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 
 import colors from "../constants/colors";
 
 const Input = (props) => {
+    const [value, setValue] = useState(props.initialValue);
     const handleTextChange = (text) => {
+        setValue(text);
         props.onChangedInput(props.id, text);
     };
     return (
@@ -22,6 +24,7 @@ const Input = (props) => {
                     {...props}
                     onChangeText={handleTextChange}
                     style={styles.input}
+                    value={value}
                 />
             </View>
             {props.errorText && (
