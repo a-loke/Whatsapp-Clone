@@ -8,7 +8,7 @@ import { child, getDatabase, ref, set, update } from "firebase/database";
 import { authenticate, logout } from "./../../store/authSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getUserData } from "./userAction";
-
+let timer;
 export const signUp = (firstName, lastName, email, password) => {
     return async (dispatch) => {
         const app = getFirebaseApp();
@@ -119,7 +119,7 @@ const saveUserDataToStorage = (token, userId, expiryDate) => {
     );
 };
 
-const userLogout = () => {
+export const userLogout = () => {
     return async (dispatch) => {
         AsyncStorage.clear();
         clearTimeout(timer);
