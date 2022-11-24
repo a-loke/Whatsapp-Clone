@@ -1,4 +1,4 @@
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Alert, StyleSheet, Text, View } from "react-native";
 import React, { useCallback, useReducer, useState } from "react";
 import PageTitle from "../components/PageTitle";
 import PageContainer from "../components/PageContainer";
@@ -9,6 +9,7 @@ import { reducer } from "../utils/reducers/formReducer";
 import { useSelector } from "react-redux";
 import colors from "../constants/colors";
 import SubmitButton from "../components/SubmitButton";
+import { updateSignedInUserData } from "../utils/actions/authAction";
 
 const SettingsScreen = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -43,7 +44,18 @@ const SettingsScreen = () => {
         [dispatchFormState]
     );
 
-    const handleSave = () => {};
+    const handleSave = async () => {
+        const updatedUserData = formState.inputValues;
+        try {
+            setIsLoading(true);
+            await updateSignedInUserData(userData.userId, updatedUserData);
+            Alert.alert("Success!", "Data has been updated.");
+        } catch (error) {
+            Alert.alert("An error occurred!", "Unable to update data");
+        } finally {
+            setIsLoading(false);
+        }
+    };
     return (
         <PageContainer>
             <PageTitle text="Settings" />
