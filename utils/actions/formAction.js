@@ -1,5 +1,6 @@
 import {
     validateEmail,
+    validateLength,
     validatePassword,
     validateString,
 } from "../validationConstraint";
@@ -11,5 +12,7 @@ export const validateInput = (inputId, inputValue) => {
         return validateEmail(inputId, inputValue);
     } else if (inputId === "password") {
         return validatePassword(inputId, inputValue);
+    } else if (inputId === "about") {
+        return validateLength(inputId, inputValue, true, 0, 150);
     }
 };
