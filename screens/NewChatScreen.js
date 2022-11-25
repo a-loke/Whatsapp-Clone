@@ -4,17 +4,16 @@ import { useNavigation } from "@react-navigation/native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import CustomHeaderButton from "../components/CustomHeaderButton";
 
-const ChatListScreen = () => {
+const NewChatScreen = () => {
     const navigation = useNavigation();
     useEffect(() => {
         navigation.setOptions({
-            headerRight: () => {
+            headerLeft: () => {
                 return (
                     <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
                         <Item
-                            title="New Chat"
-                            iconName="create-outline"
-                            onPress={() => navigation.navigate("NewChat")}
+                            title="Close"
+                            onPress={() => navigation.goBack()}
                         />
                     </HeaderButtons>
                 );
@@ -23,14 +22,11 @@ const ChatListScreen = () => {
     }, [navigation]);
     return (
         <View>
-            <Button
-                title="Go to Chat screen"
-                onPress={() => navigation.navigate("ChatScreen")}
-            />
+            <Text>New Chat screen</Text>
         </View>
     );
 };
 
-export default ChatListScreen;
+export default NewChatScreen;
 
 const styles = StyleSheet.create({});
