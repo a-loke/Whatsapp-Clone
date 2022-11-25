@@ -13,8 +13,10 @@ const NewChatScreen = () => {
     const navigation = useNavigation();
 
     const [isLoading, setIsLoading] = useState(false);
-    const [users, setUsers] = useState([]);
-    const [noUsersFound, setNoUsersFound] = useState(true);
+    const [users, setUsers] = useState();
+    const [noUsersFound, setNoUsersFound] = useState(false);
+    const [searchedUser, setSearchedUser] = useState("");
+
     useEffect(() => {
         navigation.setOptions({
             headerLeft: () => {
@@ -30,11 +32,30 @@ const NewChatScreen = () => {
         });
     }, [navigation]);
 
+    useEffect(() => {
+        const delayedSearch = setTimeout(() => {
+            if (!searchedUser || searchedUser === "") {
+                setUsers();
+                setNoUsersFound(false);
+                return;
+            }
+            setIsLoading(true);
+            setUsers({});
+            setNoUsersFound(true);
+            setIsLoading(false);
+        }, 500);
+
+        return () => clearTimeout(delayedSearch);
+    }, [searchedUser]);
     return (
         <PageContainer>
             <View style={styles.searchContainer}>
                 <FontAwesome name="search" size={15} color={colors.lightGrey} />
-                <TextInput style={styles.searchBox} placeholder="Search" />
+                <TextInput
+                    style={styles.searchBox}
+                    placeholder="Search"
+                    onChangeText={(text) => setSearchedUser(text)}
+                />
             </View>
             {!isLoading && !users && (
                 <View style={commonStyles.center}>
