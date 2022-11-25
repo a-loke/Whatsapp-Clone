@@ -1,19 +1,34 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 
 import userImage from "../assets/images/userImage.jpeg";
 import colors from "../constants/colors";
-import { launchImagePicker } from "../utils/imagePickerHelper";
+import {
+    launchImagePicker,
+    updateImageAsync,
+} from "../utils/imagePickerHelper";
 const ProfilePic = (props) => {
-    const pickImage = () => {
-        launchImagePicker();
+    const source = props.uri ? { uri: props.uri } : userImage;
+    const [image, setImage] = useState(source);
+    const pickImage = async () => {
+        try {
+            const tempUri = await launchImagePicker();
+            if (!tempUri) return;
+            const uploadUrl = await updateImageAsync(tempUri);
+            if (!uploadUrl) {
+                throw new Error("Could not upload the image");
+            }
+            setImage({ uri: uploadUrl });
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     return (
         <TouchableOpacity onPress={pickImage}>
             <Image
-                source={userImage}
+                source={image}
                 style={{
                     ...styles.image,
                     ...{ width: props.size, height: props.size },
