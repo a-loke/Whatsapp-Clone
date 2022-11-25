@@ -1,5 +1,5 @@
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { FontAwesome } from "@expo/vector-icons";
@@ -7,10 +7,14 @@ import { FontAwesome } from "@expo/vector-icons";
 import CustomHeaderButton from "../components/CustomHeaderButton";
 import PageContainer from "../components/PageContainer";
 import colors from "../constants/colors";
+import commonStyles from "../constants/commonStyles";
 
 const NewChatScreen = () => {
     const navigation = useNavigation();
 
+    const [isLoading, setIsLoading] = useState(false);
+    const [users, setUsers] = useState([]);
+    const [noUsersFound, setNoUsersFound] = useState(true);
     useEffect(() => {
         navigation.setOptions({
             headerLeft: () => {
@@ -32,6 +36,28 @@ const NewChatScreen = () => {
                 <FontAwesome name="search" size={15} color={colors.lightGrey} />
                 <TextInput style={styles.searchBox} placeholder="Search" />
             </View>
+            {!isLoading && !users && (
+                <View style={commonStyles.center}>
+                    <FontAwesome
+                        name="users"
+                        size={55}
+                        color={colors.lightGrey}
+                        style={styles.centerIcon}
+                    />
+                    <Text style={styles.centerText}>Search for a user.</Text>
+                </View>
+            )}
+            {!isLoading && noUsersFound && (
+                <View style={commonStyles.center}>
+                    <FontAwesome
+                        name="exclamation-circle"
+                        size={55}
+                        color={colors.lightGrey}
+                        style={styles.centerIcon}
+                    />
+                    <Text style={styles.centerText}>No user found.</Text>
+                </View>
+            )}
         </PageContainer>
     );
 };
@@ -53,5 +79,13 @@ const styles = StyleSheet.create({
         marginLeft: 8,
         fontSize: 15,
         width: "100%",
+    },
+    centerIcon: {
+        top: -10,
+    },
+    centerText: {
+        color: colors.textColor,
+        fontFamily: "regular",
+        letterSpacing: 0.3,
     },
 });
