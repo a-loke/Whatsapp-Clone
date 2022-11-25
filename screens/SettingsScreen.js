@@ -90,7 +90,11 @@ const SettingsScreen = () => {
         <PageContainer>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <PageTitle text="Settings" />
-                <ProfilePic size={80} />
+                <ProfilePic
+                    size={80}
+                    userId={userData.userId}
+                    uri={userData.profilePicture}
+                />
                 <Input
                     id="firstName"
                     label="First name"
