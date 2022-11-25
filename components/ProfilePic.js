@@ -1,4 +1,10 @@
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+    ActivityIndicator,
+    Image,
+    StyleSheet,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import React, { useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 
@@ -9,40 +15,61 @@ import {
     updateImageAsync,
 } from "../utils/imagePickerHelper";
 import { updateSignedInUserData } from "../utils/actions/authAction";
+import { useDispatch } from "react-redux";
+import { updateLoggedInUserData } from "../store/authSlice";
 
 const ProfilePic = (props) => {
+    const dispatch = useDispatch();
     const userId = props.userId;
     const source = props.uri ? { uri: props.uri } : userImage;
     const [image, setImage] = useState(source);
+    const [isLoading, setIsLoading] = useState(false);
     const pickImage = async () => {
         try {
             const tempUri = await launchImagePicker();
             if (!tempUri) return;
+            setIsLoading(true);
             const uploadUrl = await updateImageAsync(tempUri);
             if (!uploadUrl) {
                 throw new Error("Could not upload the image");
             }
-            await updateSignedInUserData(userId, { profilePicture: uploadUrl });
+            const newData = { profilePicture: uploadUrl };
+            await updateSignedInUserData(userId, newData);
+            dispatch(updateLoggedInUserData({ newData }));
 
             setImage({ uri: uploadUrl });
+            setIsLoading(false);
         } catch (error) {
+            setIsLoading(false);
             console.log(error);
         }
     };
 
     return (
-        <TouchableOpacity onPress={pickImage}>
-            <Image
-                source={image}
-                style={{
-                    ...styles.image,
-                    ...{ width: props.size, height: props.size },
-                }}
-            />
-            <View style={styles.editIconContainer}>
-                <FontAwesome name="pencil" size={15} color={"black"} />
-            </View>
-        </TouchableOpacity>
+        <>
+            {isLoading ? (
+                <View
+                    width={props.size}
+                    height={props.size}
+                    style={{ justifyContent: "center", alignItems: "center" }}
+                >
+                    <ActivityIndicator size={"small"} color={colors.primary} />
+                </View>
+            ) : (
+                <TouchableOpacity onPress={pickImage}>
+                    <Image
+                        source={image}
+                        style={{
+                            ...styles.image,
+                            ...{ width: props.size, height: props.size },
+                        }}
+                    />
+                    <View style={styles.editIconContainer}>
+                        <FontAwesome name="pencil" size={15} color={"black"} />
+                    </View>
+                </TouchableOpacity>
+            )}
+        </>
     );
 };
 

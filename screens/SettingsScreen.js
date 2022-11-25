@@ -151,7 +151,7 @@ const SettingsScreen = () => {
                         <SubmitButton
                             title="Save"
                             onPress={handleSave}
-                            style={{ marginTop: 20 }}
+                            style={{ marginTop: 20, width: 150 }}
                             disabled={!formState.formIsValid}
                         />
                     )
@@ -159,7 +159,7 @@ const SettingsScreen = () => {
                 <SubmitButton
                     title="Logout"
                     onPress={() => dispatch(userLogout())}
-                    style={{ marginTop: 20 }}
+                    style={{ marginTop: 20, width: 150 }}
                     color={colors.red}
                 />
             </ScrollView>
