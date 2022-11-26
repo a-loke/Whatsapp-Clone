@@ -30,8 +30,11 @@ const ChatListScreen = (props) => {
             return;
         }
         const chatUsers = [selectedUser, userData.userId];
-        navigation.navigate("ChatScreen", { users: chatUsers });
-    }, [selectedUser]);
+        const navigationProps = {
+            newChatData: { users: chatUsers },
+        };
+        navigation.navigate("ChatScreen", navigationProps);
+    }, [props.route?.params]);
     return (
         <View>
             <Button

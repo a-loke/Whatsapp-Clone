@@ -17,10 +17,12 @@ import colors from "../constants/colors";
 import commonStyles from "../constants/commonStyles";
 import { searchUser } from "../utils/actions/userAction";
 import DataItem from "../components/DataItem";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setStoredUsers } from "../store/userSlice";
 
 const NewChatScreen = () => {
     const navigation = useNavigation();
+    const dispatch = useDispatch();
 
     const [isLoading, setIsLoading] = useState(false);
     const [users, setUsers] = useState();
@@ -67,6 +69,7 @@ const NewChatScreen = () => {
     }, [searchedUser]);
 
     const userPressed = (userId) => {
+        dispatch(setStoredUsers({ [userId]: users[userId] }));
         navigation.navigate("ChatList", { selectedUserId: userId });
     };
 
