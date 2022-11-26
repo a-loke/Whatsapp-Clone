@@ -16,6 +16,7 @@ import PageContainer from "../components/PageContainer";
 import colors from "../constants/colors";
 import commonStyles from "../constants/commonStyles";
 import { searchUser } from "../utils/actions/userAction";
+import DataItem from "../components/DataItem";
 
 const NewChatScreen = () => {
     const navigation = useNavigation();
@@ -76,7 +77,8 @@ const NewChatScreen = () => {
                     data={Object.keys(users)}
                     renderItem={(itemData) => {
                         const userId = itemData.item;
-                        return <Text>{userId}</Text>;
+                        const userData = users[userId];
+                        return <DataItem />;
                     }}
                 />
             )}
