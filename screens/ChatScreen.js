@@ -9,20 +9,42 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
 
 import backgroundimage from "../assets/images/backgroundimage.jpeg";
 import colors from "../constants/colors";
 import { useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 
 const ChatScreen = (props) => {
+    const navigation = useNavigation();
     const storedUsers = useSelector((state) => state.users.storedUsers);
-    console.log(storedUsers);
-    const newChat = props.route?.params?.newChatData;
+    const userData = useSelector((state) => state.auth.userData);
+    const [chatUsers, setChatUsers] = useState([]);
     const [messageText, setMessageText] = useState("");
 
+    const newChat = props.route?.params?.newChatData;
+
+    const getOtherChatUserName = () => {
+        if (!newChat) {
+            return "";
+        }
+        const otherChatUserId = newChat.users[0];
+        const otherChatUserData = storedUsers[otherChatUserId];
+        return (
+            otherChatUserData &&
+            `${otherChatUserData.firstName} ${otherChatUserData.lastName}`
+        );
+    };
+
+    useEffect(() => {
+        navigation.setOptions({
+            headerTitle: getOtherChatUserName(),
+        });
+        setChatUsers(newChat);
+    }, [chatUsers]);
     const sendMessage = useCallback(() => {
         setMessageText("");
     }, [messageText]);
