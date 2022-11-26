@@ -6,7 +6,7 @@ import colors from "../constants/colors";
 const DataItem = (props) => {
     const { title, subtitle, image } = props;
     return (
-        <TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={props.onPress}>
             <View style={styles.container}>
                 <ProfilePic uri={image} size={40} showEditButton={false} />
                 <View style={styles.textContainer}>

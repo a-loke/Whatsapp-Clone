@@ -17,6 +17,7 @@ import colors from "../constants/colors";
 import commonStyles from "../constants/commonStyles";
 import { searchUser } from "../utils/actions/userAction";
 import DataItem from "../components/DataItem";
+import { useSelector } from "react-redux";
 
 const NewChatScreen = () => {
     const navigation = useNavigation();
@@ -25,6 +26,7 @@ const NewChatScreen = () => {
     const [users, setUsers] = useState();
     const [noUsersFound, setNoUsersFound] = useState(false);
     const [searchedUser, setSearchedUser] = useState("");
+    const userData = useSelector((state) => state.auth.userData);
 
     useEffect(() => {
         navigation.setOptions({
@@ -50,6 +52,7 @@ const NewChatScreen = () => {
             }
             setIsLoading(true);
             const searchResult = await searchUser(searchedUser);
+            delete searchResult[userData.userId];
             setUsers(searchResult);
 
             if (Object.keys(searchResult).length === 0) {
@@ -62,6 +65,11 @@ const NewChatScreen = () => {
 
         return () => clearTimeout(delayedSearch);
     }, [searchedUser]);
+
+    const userPressed = (userId) => {
+        navigation.navigate("ChatList", { selectedUserId: userId });
+    };
+
     return (
         <PageContainer>
             <View style={styles.searchContainer}>
@@ -83,6 +91,7 @@ const NewChatScreen = () => {
                                 title={`${userData.firstName} ${userData.lastName}`}
                                 subtitle={userData.about}
                                 image={userData.profilePicture}
+                                onPress={() => userPressed(userId)}
                             />
                         );
                     }}
