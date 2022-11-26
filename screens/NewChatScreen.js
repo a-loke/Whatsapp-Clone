@@ -1,4 +1,11 @@
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+    Button,
+    FlatList,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -42,7 +49,13 @@ const NewChatScreen = () => {
             }
             setIsLoading(true);
             const searchResult = await searchUser(searchedUser);
-            console.log(searchResult);
+            setUsers(searchResult);
+
+            if (Object.keys(searchResult).length === 0) {
+                setNoUsersFound(true);
+            } else {
+                setNoUsersFound(false);
+            }
             setIsLoading(false);
         }, 500);
 
@@ -58,6 +71,15 @@ const NewChatScreen = () => {
                     onChangeText={(text) => setSearchedUser(text)}
                 />
             </View>
+            {!isLoading && !noUsersFound && users && (
+                <FlatList
+                    data={Object.keys(users)}
+                    renderItem={(itemData) => {
+                        const userId = itemData.item;
+                        return <Text>{userId}</Text>;
+                    }}
+                />
+            )}
             {!isLoading && !users && (
                 <View style={commonStyles.center}>
                     <FontAwesome
