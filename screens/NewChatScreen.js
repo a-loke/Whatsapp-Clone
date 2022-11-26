@@ -8,6 +8,7 @@ import CustomHeaderButton from "../components/CustomHeaderButton";
 import PageContainer from "../components/PageContainer";
 import colors from "../constants/colors";
 import commonStyles from "../constants/commonStyles";
+import { searchUser } from "../utils/actions/userAction";
 
 const NewChatScreen = () => {
     const navigation = useNavigation();
@@ -33,15 +34,15 @@ const NewChatScreen = () => {
     }, [navigation]);
 
     useEffect(() => {
-        const delayedSearch = setTimeout(() => {
+        const delayedSearch = setTimeout(async () => {
             if (!searchedUser || searchedUser === "") {
                 setUsers();
                 setNoUsersFound(false);
                 return;
             }
             setIsLoading(true);
-            setUsers({});
-            setNoUsersFound(true);
+            const searchResult = await searchUser(searchedUser);
+            console.log(searchResult);
             setIsLoading(false);
         }, 500);
 
